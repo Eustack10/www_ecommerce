@@ -21,12 +21,16 @@
         <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- custom Css-->
         <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
-
+        <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      />
 
     </head>
 
     <body>
-
+        
+        @include('admin.components.msg')
         <!-- Begin page -->
         <div id="layout-wrapper">
 
@@ -501,7 +505,7 @@
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
+                            <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg') }}"
                                 alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
@@ -512,29 +516,6 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header">Welcome Anna!</h6>
-                        <a class="dropdown-item" href="pages-profile.html"><i
-                                class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Profile</span></a>
-                        <a class="dropdown-item" href="apps-chat.html"><i
-                                class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Messages</span></a>
-                        <a class="dropdown-item" href="apps-tasks-kanban.html"><i
-                                class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Taskboard</span></a>
-                        <a class="dropdown-item" href="pages-faqs.html"><i
-                                class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Help</span></a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile.html"><i
-                                class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Balance : <b>$5971.67</b></span></a>
-                        <a class="dropdown-item" href="pages-profile-settings.html"><span
-                                class="badge bg-soft-success text-success mt-1 float-end">New</span><i
-                                class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Settings</span></a>
-                        <a class="dropdown-item" href="auth-lockscreen-basic.html"><i
-                                class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Lock screen</span></a>
                         <a class="dropdown-item" href="{{ route('admin.logout') }}"><i
                                 class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle" data-key="t-logout">Logout</span></a>
@@ -617,159 +598,19 @@
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarAuth">
-                                    <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Authentication</span>
+                                    <i class=" ri-database-line"></i>
+                                    <span data-key="t-authentication">Setup</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarAuth">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="#sidebarSignIn" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin"> Sign In
+                                            <a href="{{ route('admin.categories.index') }}" class="nav-link" role="button"
+                                                aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin">
+                                                <i class="ri-pie-chart-line"></i>
+                                                <span data-key="t-authentication">Categories</span>
+                                                
                                             </a>
-                                            <div class="collapse menu-dropdown" id="sidebarSignIn">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-signin-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Cover
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarSignUp" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarSignUp" data-key="t-signup"> Sign Up
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarSignUp">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-signup-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-signup-cover.html" class="nav-link" data-key="t-cover"> Cover
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="#sidebarResetPass" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarResetPass" data-key="t-password-reset">
-                                                Password Reset
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarResetPass">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-basic">
-                                                            Basic </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-pass-reset-cover.html" class="nav-link" data-key="t-cover">
-                                                            Cover </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="#sidebarLockScreen" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarLockScreen" data-key="t-lock-screen">
-                                                Lock Screen
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarLockScreen">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-lockscreen-basic.html" class="nav-link" data-key="t-basic">
-                                                            Basic </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-lockscreen-cover.html" class="nav-link" data-key="t-cover">
-                                                            Cover </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="#sidebarLogout" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarLogout" data-key="t-logout"> Logout
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarLogout">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-logout-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-logout-cover.html" class="nav-link" data-key="t-cover"> Cover
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarSuccessMsg" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarSuccessMsg"
-                                                data-key="t-success-message"> Success Message
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarSuccessMsg">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-success-msg-basic.html" class="nav-link" data-key="t-basic">
-                                                            Basic </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-success-msg-cover.html" class="nav-link" data-key="t-cover">
-                                                            Cover </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarTwoStep" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarTwoStep"
-                                                data-key="t-two-step-verification"> Two Step Verification
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarTwoStep">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-twostep-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-twostep-cover.html" class="nav-link" data-key="t-cover"> Cover
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarErrors" class="nav-link" data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarErrors" data-key="t-errors"> Errors
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarErrors">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="auth-404-basic.html" class="nav-link" data-key="t-404-basic"> 404
-                                                            Basic </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-404-cover.html" class="nav-link" data-key="t-404-cover"> 404
-                                                            Cover </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-404-alt.html" class="nav-link" data-key="t-404-alt"> 404 Alt
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="auth-500.html" class="nav-link" data-key="t-500"> 500 </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            
                                         </li>
                                     </ul>
                                 </div>
@@ -1367,9 +1208,12 @@
         <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
         <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
         <script src="{{ asset('assets/js/plugins.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/sweetalerts.init.js') }}"></script>
         
         <!-- App js -->
         <script src="{{ asset('assets/js/app.js') }}"></script>
+
+        @yield('js')
     </body>
 
 </html>
