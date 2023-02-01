@@ -17,7 +17,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $data = Categories::all();
+        $data = Categories::orderBy('id','DESC')->paginate(10);
         return view('admin.categories.index', compact('data'));
     }
 
@@ -75,7 +75,8 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Categories::findOrFail($id);
+        return view('admin.categories.edit', compact('data'));
     }
 
     /**
@@ -87,7 +88,21 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ],[
+            'name.requried' => 'Name is required'
+        ]);
+        if($v->fails()){
+            return back()->withErrors($v->errors());
+        }
+        try{
+            $name = filter_var($request->name, FILTER_SANITIZE_STRING);
+            Categories::where('id', $id)->update(['name' => $name]);
+            return redirect()->route('admin.categories.index')->with('msg', ['type' => 'success','content' => 'Category Updated Successfully']);
+        }catch(Exception $e){
+            return back()->with('error','Cannot update category');
+        }
     }
 
     /**
@@ -108,3 +123,11 @@ class CategoriesController extends Controller
         }
     }
 }
+// get => admin/categories [index]
+// post => admin/categories [store]
+// get => admin/categories/{id}/edit [edit]
+// put/patch => admin/categories/{id} [update]
+// delete => admin/categories/1 [destory]
+
+// admin/categories/{}
+// php => browser => html,css,js

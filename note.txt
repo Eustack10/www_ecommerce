@@ -1,0 +1,32 @@
+Sprint - 1
+ Admin Setup
+ -Auth
+ -Categories
+ -Product
+ -Admin account
+
+Sprint - 2
+ User Side
+ -Template Setup
+ -Display Product
+ -Filter Product
+
+Sprint - 3
+ User Side
+ - Account
+ - signin,
+ - signup,
+ - email sending,
+ - verification,
+ - Social Login,
+ - Forget Password
+
+Sprint - 4
+ User + Admin
+ -Cart System
+ -WishList [hw]
+ -Ordering
+ -Ordering Status
+
+Sprint - 5
+ -Thay Thay Mhwer Mhwer

@@ -1,12 +1,10 @@
 @extends('admin.components.main')
 @section('content')
-    @include('admin.categories.delete')
-
     <div class="card p-4">
         <div class="d-flex justify-content-end">
-            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm d-flex justify-content-center gap-1">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm d-flex justify-content-center gap-1">
                <i class="ri-add-line"></i>
-               New Category
+                Products
             </a>
         </div>
         <table class="table table-borderless table-striped">
@@ -14,6 +12,9 @@
                 <tr>
                     <th>No</th>
                     <th>Name</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Varitants</th>
                     <th>Created At</th>
                     <th>Action</th>
                 </tr>
@@ -22,6 +23,9 @@
                @foreach ($data as $index=>$d)
                <tr>
                     <td>{{ $index+1 }}</td>
+                    <td>{{ $d->name }}</td>
+                    <td>{{ $d->brand }}</td>
+                    <td>{{ $d->categories->name }}</td>
                     <td>{{ $d->name }}</td>
                     <td>{{ $d->created_at->diffForHumans() }}</td>
                     <td>
@@ -57,13 +61,3 @@
         @endif
     </div>
 @endsection
-@section('js')
-    <script>
-        function deleteCat(id){
-            document.querySelector('#delForm').action = `{{ route('admin.categories.index') }}` + `/${id}`;
-        }
-    </script>
-@endsection
- {{-- 1 2 3 4 5 ...
- ... 6 7 8 9 10 ...
- ... 11 12 13 14 15 ... --}}

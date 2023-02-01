@@ -598,7 +598,7 @@
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarAuth">
-                                    <i class=" ri-database-line"></i>
+                                    <i class="ri-database-line"></i>
                                     <span data-key="t-authentication">Setup</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarAuth">
@@ -610,7 +610,15 @@
                                                 <span data-key="t-authentication">Categories</span>
                                                 
                                             </a>
-                                            
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.products.index') }}" class="nav-link" role="button"
+                                                aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin">
+                                                <i class="ri-database-line"></i>
+                                                <span data-key="t-authentication">Products</span>
+                                                
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -1203,12 +1211,11 @@
 
         <!-- JAVASCRIPT -->
         <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+        {{-- <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script> --}}
         <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
         <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
         <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
         <script src="{{ asset('assets/js/plugins.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/sweetalerts.init.js') }}"></script>
         
         <!-- App js -->
         <script src="{{ asset('assets/js/app.js') }}"></script>

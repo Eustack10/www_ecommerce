@@ -3,12 +3,14 @@
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\CategoriesController;
 use App\Http\Controllers\admin\IndexController;
+use App\Http\Controllers\admin\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function(){
     Route::group(['middleware' => 'admin'], function(){
         Route::get('/', [IndexController::class, 'index'])->name('admin.index');
         Route::resource('/categories', CategoriesController::class, ['as'=>'admin']);
+        Route::resource('/products', ProductsController::class, ['as'=>'admin']);
     });
 
     Route::view('/login', 'admin.auth.login')->name('admin.loginView');
