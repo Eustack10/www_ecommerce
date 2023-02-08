@@ -15,6 +15,7 @@
                     <th>Brand</th>
                     <th>Category</th>
                     <th>Varitants</th>
+                    <th>Image</th>
                     <th>Created At</th>
                     <th>Action</th>
                 </tr>
@@ -27,6 +28,7 @@
                     <td>{{ $d->brand }}</td>
                     <td>{{ $d->categories->name }}</td>
                     <td>{{ $d->name }}</td>
+                    <td><img src="{{ asset($d->products_images[0]->url) }}" with="100px" alt=""></td>
                     <td>{{ $d->created_at->diffForHumans() }}</td>
                     <td>
                         <a href="{{ route('admin.categories.edit', $d->id) }}" class="btn btn-sm btn-danger">

@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\CategoriesController;
 use App\Http\Controllers\admin\IndexController;
 use App\Http\Controllers\admin\ProductsController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function(){
@@ -21,4 +22,9 @@ Route::group(['prefix' => 'admin'], function(){
 
 Route::get('/', function(){
     echo "user side";
+});
+
+Route::group(['prefix'=>'test'], function(){
+    Route::view('/storage', 'test.storage');
+    Route::post('/storage', [TestController::class, 'storage'])->name('storage.upload');
 });
