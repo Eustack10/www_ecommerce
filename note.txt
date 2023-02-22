@@ -3,17 +3,17 @@ Sprint - 1
  -Auth
  -Categories
  -Product
- -Admin account
+ -Admin account @
 
 Sprint - 2
  User Side
  -Template Setup
  -Display Product
- -Filter Product
+ -Filter Product @
 
 Sprint - 3
  User Side
- - Account
+ - Account *
  - signin,
  - signup,
  - email sending,
@@ -30,3 +30,4 @@ Sprint - 4
 
 Sprint - 5
  -Thay Thay Mhwer Mhwer
+

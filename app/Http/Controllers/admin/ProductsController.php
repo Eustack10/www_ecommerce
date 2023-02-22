@@ -20,8 +20,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        $catCount = Categories::count();
         $data = Products::with('categories', 'products_variants', 'products_images')->orderBy('id', 'DESC')->paginate(15);
-        return view('admin.products.index', compact('data'));
+        return view('admin.products.index', compact('data', 'catCount'));
     }
     /**
      * Show the form for creating a new resource.
@@ -57,7 +58,7 @@ class ProductsController extends Controller
             'name' => filter_var($request->name, FILTER_SANITIZE_STRING),
             'brand'=> filter_var($request->brand, FILTER_SANITIZE_STRING),
             'description'=> $request->description,
-            'is_publish' => $request->has('is_publish') ? 1 : 0,
+            'is_publish' => $request->has('is_publish') ? '1' : '0',
         ]);
 
         if($request->hasFile('images')){
@@ -78,6 +79,8 @@ class ProductsController extends Controller
                 ]);
             }
         }
+        return redirect()->route('admin.products.index')->with('msg', ['type' => 'success','content' => 'Product Created Successfully']);
+
     }
 
     /**
@@ -99,7 +102,9 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Products::findOrFail($id);
+        $categories = Categories::select('id', 'name')->get();
+        return view('admin.products.edit', compact('categories', 'data'));
     }
 
     /**
@@ -111,7 +116,61 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'categories_id' => 'required|integer',
+            'brand' => 'required|string',
+            'description'=> 'required|string',
+            'images.*' => 'file|mimes:jpg,png,jpeg,gif,webp,svg|max:2048',
+        ]);
+        if($v->fails()){
+            return back()->withErrors($v->errors())->withInput($request->all());
+        }
+        Products::where('id', $id)->update([
+            'categories_id' => $request->categories_id,
+            'name' => filter_var($request->name, FILTER_SANITIZE_STRING),
+            'brand'=> filter_var($request->brand, FILTER_SANITIZE_STRING),
+            'description'=> $request->description,
+            'is_publish' => $request->has('is_publish') ? 1 : 0,
+        ]);
+
+        if(count($request->old_images) > 0){
+            $pimg = ProductsImages::whereNotIn('id', $request->old_images)->where('products_id', $id);
+            foreach($pimg->get() as $img){
+                Storage::delete($img->getRawOriginal('url'));
+            }
+            $pimg->delete();
+
+        }else{
+            $pimg = ProductsImages::where('products_id', $id);
+            foreach($pimg->get() as $img){
+                Storage::delete($img->getRawOriginal('url'));
+            }
+            $pimg->delete();
+        }
+
+        if($request->hasFile('images')){
+            foreach($request->file('images') as $file){
+                $url = Storage::put('product_images', $file);
+                ProductsImages::create([
+                    'products_id' => $id,
+                    'url' => $url,
+                ]);
+            }
+        }
+
+        if(count($request->variant_name) > 0){
+            ProductsVariants::where('products_id', $id)->delete();
+            foreach($request->variant_name as $index=>$name){
+                ProductsVariants::create([
+                    'products_id' => $id,
+                    'name' => $name,
+                    'price' => $request->variant_price[$index]
+                ]);
+            }
+        }
+        return redirect()->route('admin.products.index')->with('msg', ['type' => 'success','content' => 'Product Edited Successfully']);
     }
 
     /**
@@ -122,6 +181,25 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $p = Products::findOrFail($id);
+        foreach($p->products_images as $img){
+            Storage::delete($img->getRawOriginal('url')); // delete storage data
+            // $img->delete(); // delete db data
+        }
+        // $p->products_variants()->delete();
+        $p->delete();
+        return redirect()->route('admin.products.index')->with('msg', ['type' => 'success','content' => 'Product Deleted Successfully']);
+
+    }
+    function getProductsImages($id){
+        $data = Products::findOrFail($id);
+        $images = [];
+        foreach($data->products_images as $img){
+            $images[] = [
+                'id' => $img->id,
+                'src' => $img->url
+            ];
+        }
+        return response()->json($images);
     }
 }
