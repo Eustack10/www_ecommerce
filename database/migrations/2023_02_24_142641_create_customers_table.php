@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
-            $table->string('phone');
-            $table->date('dob');
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->string('password')->nullable();
+            $table->string('phone')->nullable();
+            $table->date('dob')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->default('male');
             $table->string('address')->nullable();
             $table->enum('is_verified',['1','0'])->default(0);

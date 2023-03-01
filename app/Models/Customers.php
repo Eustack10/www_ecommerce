@@ -21,6 +21,9 @@ class Customers extends Authenticatable
         'address',
         'is_verified',
         'verify_code',
+        'provider',
+        'provider_id',
+        'avatar',
     ];
 
 }

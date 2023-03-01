@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -62,5 +63,31 @@ class AuthController extends Controller
     function verify($code){
         Customers::where('verify_code', $code)->update(['is_verified' => '1']);
         echo "Your account is already verified";
+    }
+    function OAuthRedirect($provider){
+        return Socialite::driver($provider)->redirect();
+    }
+    function OAuthFallback($provider){
+        $user = Socialite::driver($provider)->stateless()->user()->user;
+        $notExist = Customers::where('provider_id', $user['id'])->get()->isEmpty();
+        if($notExist){
+            Customers::create([
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'is_verified' => '1',
+                'provider' => $provider,
+                'provider_id' => $user['id'],
+                'password' => password_hash($user['id'], PASSWORD_BCRYPT)
+            ]);
+        }
+        
+        if(Auth::guard('customer')->attempt([
+            'email' => $user['email'],
+            'password' => $user['id']
+        ])){
+            echo "logged in";
+        }else{
+            echo "no";
+        }
     }
 }

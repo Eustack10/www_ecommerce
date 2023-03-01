@@ -7,13 +7,13 @@
                     <form action="" class="">
                         <h3>User Login</h3>
                         <div>
-                            <a href="">
+                            <a href="{{ route('oauth', 'facebook') }}">
                                 <i class="fa fa-facebook"></i>
                             </a>
-                            <a href="">
+                            <a href="{{ route('oauth', 'google') }}">
                                 <i class="fa fa-google"></i>
                             </a>
-                            <a href="">
+                            <a href="{{ route('oauth', 'github') }}">
                                 <i class="fa fa-github"></i>
                             </a>
                         </div>

@@ -33,6 +33,9 @@ Route::view('/register','user.account.register')->name('registerView');
 Route::post('/register', [UserAuthController::class, 'register'])->name('register');
 Route::get('/verify/{code}', [UserAuthController::class, 'verify'])->name('verify');
 
+// Socialite Fallback URL
+Route::get('/auth/{provider}', [UserAuthController::class, 'OAuthRedirect'])->name('oauth');
+Route::get('/auth/{provider}/callback', [UserAuthController::class, 'OAuthFallback']);
 
 Route::group(['prefix'=>'test'], function(){
     Route::view('/storage', 'test.storage');
