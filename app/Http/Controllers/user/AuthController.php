@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PasswordReset;
 use App\Mail\VerifyUser;
 use App\Models\Customers;
 use Exception;
@@ -15,6 +16,23 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    function login(Request $request){
+        $v = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if($v->fails()){
+            return back()->with('error', 'Email or Password Wrong');
+        }
+        if(Auth::guard('customer')->attempt(['email' => $request->email, 'password'=>$request->password])){
+            return redirect()->route('index');
+        }else{
+
+            return back()->with('error', 'Email or Password Wrong');
+        }
+
+    }
     function register(Request $request){
         $v = Validator::make($request->all(), [
             'name' => 'required|string|min:3',
@@ -52,14 +70,15 @@ class AuthController extends Controller
             'email' => $cus->email,
             'verify_code' => $verify_code
         ];
-        Mail::to('minheinkyaw404@gmail.com')->send(new VerifyUser($mailData));
+        Mail::to($cus->email)->send(new VerifyUser($mailData));
         try{
             Auth::guard('customer')->attempt(['email' => $cus->email, 'password'=>$password]);
-                return redirect()->route('index');
+            return back()->with('msg', 'Your account is created. Please check your email to verify your account');
         }catch(Exception $e){
             echo $e->getMessage();
         }
     }
+
     function verify($code){
         Customers::where('verify_code', $code)->update(['is_verified' => '1']);
         echo "Your account is already verified";
@@ -68,9 +87,11 @@ class AuthController extends Controller
         return Socialite::driver($provider)->redirect();
     }
     function OAuthFallback($provider){
+
         $user = Socialite::driver($provider)->stateless()->user()->user;
         $notExist = Customers::where('provider_id', $user['id'])->get()->isEmpty();
-        if($notExist){
+        $isUserCreatedManually = Customers::where([['provider', null], ['email', $user['email']]])->get()->isEmpty();
+        if($notExist && $isUserCreatedManually){
             Customers::create([
                 'name' => $user['name'],
                 'email' => $user['email'],
@@ -79,15 +100,60 @@ class AuthController extends Controller
                 'provider_id' => $user['id'],
                 'password' => password_hash($user['id'], PASSWORD_BCRYPT)
             ]);
+        }else{
+            if(!$isUserCreatedManually){
+                return redirect()->route('loginView')->with('msg', 'Your Account Already Exist');
+            }else{
+                Auth::guard('customer')->attempt([
+                    'email' => $user['email'],
+                    'password' => $user['id']
+                ]);
+                return redirect()->route('index');
+            }
         }
         
-        if(Auth::guard('customer')->attempt([
-            'email' => $user['email'],
-            'password' => $user['id']
-        ])){
-            echo "logged in";
-        }else{
-            echo "no";
+    }
+
+    function checkUser(Request $request){
+        $v = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if($v->fails()){
+            return back()->withErrors($v->errors());
         }
+
+        $notExist = Customers::where([['provider', null], ['email', $request->email]])->get()->isEmpty();
+        if($notExist){
+            return back()->with('error', 'Your account does not exist');
+        }
+        $cus = Customers::where('email',$request->email)->first();
+        $mailData = [
+            'name' => $cus->name,
+            'email' => $cus->email,
+            'verify_code' => $cus->verify_code
+        ];
+        Mail::to($cus->email)->send(new PasswordReset($mailData));
+        return back()->with('msg', 'Your reset password link is already sent. Please check your email');
+    }
+    function resetPassword($code){
+        $cus = Customers::where('verify_code',$code)->first();
+        return view('user.account.reset_password', compact('cus'));
+    }
+    function confirmResetPassword(Request $request){
+        $v = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'repassword' => 'required|string|same:password',
+        ]);
+
+        if($v->fails()){
+            return back()->withErrors($v->errors());
+        }
+        $password = password_hash($request->password, PASSWORD_BCRYPT);
+        $cus = Customers::where('email',$request->email)->update([
+            'password' => $password,
+        ]);
+        return redirect()->route('loginView')->with('msg','Your password reset successfully, Please login');
     }
 }

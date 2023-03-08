@@ -26,16 +26,27 @@ Route::group(['prefix' => 'admin'], function(){
 Route::get('/', [UserIndexController::class, 'index'])->name('index');
 
 
-// User side account section
+// [Auth] User side account section
 Route::view('/login','user.account.login')->name('loginView');
 Route::post('/login', [UserAuthController::class, 'login'])->name('login');
 Route::view('/register','user.account.register')->name('registerView');
 Route::post('/register', [UserAuthController::class, 'register'])->name('register');
 Route::get('/verify/{code}', [UserAuthController::class, 'verify'])->name('verify');
 
-// Socialite Fallback URL
+
+// [Auth] Forget password
+Route::view('/auth/forget', 'user.account.forget')->name('forgetView');
+Route::post('/auth/forget/check', [UserAuthController::class, 'checkUser'])->name('checkUser');
+Route::get('/auth/reset_password/{code}', [UserAuthController::class, 'resetPassword'])->name('resetPassword');
+Route::post('/auth/confirm_reset_password', [UserAuthController::class, 'confirmResetPassword'])->name('confirmResetPassword');
+
+
+// [Auth] Socialite Fallback URL
 Route::get('/auth/{provider}', [UserAuthController::class, 'OAuthRedirect'])->name('oauth');
 Route::get('/auth/{provider}/callback', [UserAuthController::class, 'OAuthFallback']);
+
+
+
 
 Route::group(['prefix'=>'test'], function(){
     Route::view('/storage', 'test.storage');

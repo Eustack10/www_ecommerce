@@ -18,16 +18,16 @@ Sprint - 3
  - signin, @
  - email sending,
  - verification,
- - Social Login, *
+ - Social Login,
  - Forget Password
 
 Sprint - 4
  User + Admin
- -Cart System
+ -Cart System *
  -WishList [hw]
  -Ordering
  -Ordering Status
-
+ -Account
 Sprint - 5
  -Thay Thay Mhwer Mhwer
 

@@ -116,7 +116,7 @@
                         <a href="#" class="flex-c-m trans-04 p-lr-25">
                             Help & FAQs
                         </a>
-                        <a href="#" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ route('loginView') }}" class="flex-c-m trans-04 p-lr-25">
                             My Account
                         </a>
                         <a href="#" class="flex-c-m trans-04 p-lr-25">
@@ -221,7 +221,7 @@
                         <a href="#" class="flex-c-m p-lr-10 trans-04">
                             Help & FAQs
                         </a>
-                        <a href="#" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ route('loginView') }}" class="flex-c-m p-lr-10 trans-04">
                             My Account
                         </a>
                         <a href="#" class="flex-c-m p-lr-10 trans-04">

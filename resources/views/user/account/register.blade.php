@@ -7,6 +7,9 @@
                     <form action="{{ route('register') }}" method="POST" class="">
                         @csrf
                         <h3>User Registeration</h3>
+                        @if (Session::has('msg'))
+                            {{ Session::get('msg') }}
+                        @endif
                         <div>
                             <a href="">
                                 <i class="fa fa-facebook"></i>
