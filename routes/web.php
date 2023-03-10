@@ -25,7 +25,8 @@ Route::group(['prefix' => 'admin'], function(){
 
 Route::get('/', [UserIndexController::class, 'index'])->name('index');
 
-
+Route::get('/products/{id}', [UserIndexController::class, 'productDetail'])->name('productDetail');
+Route::post('/add_to_cart', [UserIndexController::class, 'addToCart'])->name('addToCart');
 // [Auth] User side account section
 Route::view('/login','user.account.login')->name('loginView');
 Route::post('/login', [UserAuthController::class, 'login'])->name('login');
@@ -41,7 +42,7 @@ Route::get('/auth/reset_password/{code}', [UserAuthController::class, 'resetPass
 Route::post('/auth/confirm_reset_password', [UserAuthController::class, 'confirmResetPassword'])->name('confirmResetPassword');
 
 
-// [Auth] Socialite Fallback URL
+// [OAuth] Socialite Fallback URL
 Route::get('/auth/{provider}', [UserAuthController::class, 'OAuthRedirect'])->name('oauth');
 Route::get('/auth/{provider}/callback', [UserAuthController::class, 'OAuthFallback']);
 
@@ -53,4 +54,5 @@ Route::group(['prefix'=>'test'], function(){
     Route::post('/storage', [TestController::class, 'storage'])->name('storage.upload');
 
     Route::get('/mail', [TestController::class, 'mail']);
+    Route::get('/session', [TestController::class, 'session']);
 });
